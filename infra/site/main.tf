@@ -4,7 +4,7 @@ resource "cloudflare_pages_project" "main" {
     production_branch = "main"
 
     build_config = {
-      destination_dir = "site/public"
+      destination_dir = "public"
     }
 
     deployment_configs = {
@@ -24,7 +24,7 @@ resource "cloudflare_pages_project" "main" {
         owner = "bashar-515"
 
         path_includes = [
-          "site/public/**",
+          "public/**",
         ]
 
         production_branch = "main"
