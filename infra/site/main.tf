@@ -4,25 +4,12 @@ resource "cloudflare_pages_project" "main" {
     production_branch = "main"
 
     build_config = {
-      build_command = "cd site && bash etc/scripts/build.sh"
-      destination_dir = "site/dist"
+      destination_dir = "site/public"
     }
 
     deployment_configs = {
       production = {
         fail_open = false
-
-        env_vars = {
-          PROJECT_BANANA_URL = {
-            type = "plain_text"
-            value = "https://project-banana.com"
-          }
-
-          CYCAS_URL = {
-            type = "plain_text"
-            value = "https://cycas.me"
-          }
-        }
       }
 
       preview = {
@@ -37,8 +24,7 @@ resource "cloudflare_pages_project" "main" {
         owner = "bashar-515"
 
         path_includes = [
-          "site/src/**",
-          "site/etc/scripts/build.sh",
+          "site/public/**",
         ]
 
         production_branch = "main"
