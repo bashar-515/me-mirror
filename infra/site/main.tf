@@ -29,7 +29,7 @@ resource "cloudflare_pages_project" "main" {
 
         production_branch = "main"
         production_deployments_enabled = true
-        repo_name = "platform-mirror"
+        repo_name = "me-mirror"
       }
     }
 }
