@@ -24,7 +24,7 @@ resource "cloudflare_pages_project" "main" {
         owner = "bashar-515"
 
         path_includes = [
-          "public/**",
+          "public/*",
         ]
 
         production_branch = "main"
