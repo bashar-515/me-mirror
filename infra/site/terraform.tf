@@ -9,11 +9,11 @@ terraform {
   }
 
   cloud {
-    organization = "Platform-01"
+    organization = "Beesho"
     hostname = "app.terraform.io"
 
     workspaces {
-      name = "site-production"
+      name = "site"
     }
   }
 }

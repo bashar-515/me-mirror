@@ -1,30 +1,20 @@
 resource "tfe_organization" "main" {
-  name = "Platform-01"
+  name = "Beesho"
   email = var.email
 }
 
-module "runner" {
-  source = "./modules/tfe"
-
-  project_name = "Runner"
-  organization_name = tfe_organization.main.name
-  workspace_name = "runner"
-
-  force_delete = true
+resource "tfe_project" "main" {
+  name = "site"
+  organization = tfe_organization.main.name
 }
 
-module "site_staging" {
-  source = "./modules/tfe"
-
-  project_name = "Site"
-  organization_name = tfe_organization.main.name
-  workspace_name = "site-staging"
+resource "tfe_workspace" "main" {
+  name = "site"
+  organization = tfe_organization.main.name
+  project_id = tfe_project.main.id
 }
 
-module "site_production" {
-  source = "./modules/tfe"
-
-  project_id = module.site_staging.project_id
-  organization_name = tfe_organization.main.name
-  workspace_name = "site-production"
+resource "tfe_workspace_settings" "main" {
+  workspace_id = tfe_workspace.main.id
+  execution_mode = "local"
 }
