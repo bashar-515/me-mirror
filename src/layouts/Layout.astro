@@ -1,0 +1,147 @@
+---
+import Spotify from "../components/Spotify.astro";
+import "../styles/global.css";
+
+const navLinks = [
+  { href: "/", label: "index" },
+  { href: "/projects", label: "projects" },
+  { href: "/gallery", label: "gallery" },
+];
+
+const { pathname } = Astro.url;
+---
+
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="icon" href="data:," />
+    <title>beesho</title>
+
+    <script is:inline>
+      document.documentElement.classList.toggle(
+        "dark",
+        localStorage.getItem("theme") === "dark",
+      );
+    </script>
+  </head>
+
+  <body class="flex min-h-dvh flex-col">
+    <nav
+      class="border-b-on-bg-alt/25 mb-6 flex items-center gap-6 border-t border-b border-t-transparent px-6 py-4"
+    >
+      <a href="/" class="mr-auto font-mono text-2xl hover:italic" title="home"
+        >bashar</a
+      >
+
+      {
+        navLinks.map(({ href, label }) => {
+          const spanClass =
+            "group-hover:text-on-bg-alt group-data-[active]:text-on-bg text-transparent";
+
+          return (
+            <a
+              href={href}
+              data-active={
+                pathname === href || pathname === `${href}/` || undefined
+              }
+              class="group text-on-bg-alt hover:text-on-bg data-[active]:text-on-bg"
+            >
+              <span class={spanClass} aria-hidden="true">
+                [{" "}
+              </span>
+              {label}
+              <span class={spanClass} aria-hidden="true">
+                {" "}
+                ]
+              </span>
+            </a>
+          );
+        })
+      }
+
+      <div class="bg-on-bg-alt/25 w-px self-stretch"></div>
+
+      <div class="flex gap-3">
+        <button
+          id="theme-toggle"
+          title="toggle theme"
+          aria-label="toggle theme"
+          class="group text-on-bg-alt hover:text-on-bg text-sm before:content-['◐'] dark:before:content-['◑']"
+        >
+        </button>
+
+        <a
+          href="https://codeberg.org/bashar-515/me"
+          target="_blank"
+          rel="noopener"
+          title="source code"
+          aria-label="source code"
+          class="group text-on-bg-alt hover:text-on-bg text-sm"
+        >
+          &lt;/&gt;
+        </a>
+      </div>
+    </nav>
+
+    <div class="grid grow grid-cols-[1fr_auto_1fr]">
+      <aside>
+        <Spotify server:defer />
+      </aside>
+
+      <main class="prose prose-stone dark:prose-invert mx-auto">
+        <slot />
+      </main>
+    </div>
+
+    <footer
+      class="border-t-on-bg-alt/50 mx-3 mb-5 flex flex-col-reverse justify-end border-t border-b border-b-transparent px-3 py-1 sm:flex-row"
+    >
+      <p class="mr-auto font-serif text-xs italic">thanks for stopping by :)</p>
+
+      <div class="text-sm">
+        <a
+          class="underline hover:no-underline"
+          href="https://boxd.it/4NAk7"
+          target="_blank"
+          rel="noopener">letterboxd</a
+        >
+        <a
+          class="underline hover:no-underline"
+          href="https://www.discogs.com/user/basharr/collection"
+          target="_blank"
+          rel="noopener">discogs</a
+        >
+        <span aria-hidden="true">•</span>
+        <a
+          class="underline hover:no-underline"
+          href="https://codeberg.org/bashar-515"
+          target="_blank"
+          rel="noopener">codeberg</a
+        >
+        <a
+          class="underline hover:no-underline"
+          href="https://github.com/bashar-515"
+          target="_blank"
+          rel="noopener">github</a
+        >
+        <span aria-hidden="true">•</span>
+        <a
+          class="underline hover:no-underline"
+          href="https://www.linkedin.com/in/bashareid/"
+          target="_blank"
+          rel="noopener">linkedin</a
+        >
+      </div>
+    </footer>
+
+    <script>
+      document.getElementById("theme-toggle")?.addEventListener("click", () => {
+        localStorage.setItem(
+          "theme",
+          document.documentElement.classList.toggle("dark") ? "dark" : "light",
+        );
+      });
+    </script>
+  </body>
+</html>

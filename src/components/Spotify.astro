@@ -1,0 +1,12 @@
+---
+import { env } from "cloudflare:workers";
+
+const clientId = env.SPOTIFY_CLIENT_ID;
+const clientSecret = env.SPOTIFY_CLIENT_SECRET;
+---
+
+<div></div>
+
+<script is:inline define:vars={{ clientId }}>
+  console.log(clientId);
+</script>

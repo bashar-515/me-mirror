@@ -1,0 +1,92 @@
+@import "tailwindcss";
+@plugin "@tailwindcss/typography";
+
+@custom-variant dark (&:where(.dark, .dark *));
+
+@theme inline {
+  --color-bg: var(--bg);
+
+  --color-on-bg: var(--on-bg);
+  --color-on-bg-alt: var(--on-bg-alt);
+}
+
+html {
+  background: var(--bg);
+  color: var(--on-bg);
+}
+
+:root {
+  --bg: var(--color-cream-50);
+
+  --on-bg: var(--color-wine-plum-700);
+  --on-bg-alt: var(--color-wine-plum-300);
+}
+
+.dark {
+  --bg: var(--color-coffee-bean-950);
+
+  --on-bg: var(--color-wine-plum-200);
+  --on-bg-alt: var(--color-wine-plum-400);
+}
+
+@theme {
+  --color-cream-50: oklch(98.5% 0.026 109.2);
+  --color-cream-100: oklch(97.07% 0.051 109.71);
+  --color-cream-200: oklch(94.59% 0.101 110.61);
+  --color-cream-300: oklch(92.06% 0.143 111.48);
+  --color-cream-400: oklch(90.02% 0.175 112.26);
+  --color-cream-500: oklch(87.89% 0.191 112.98);
+  --color-cream-600: oklch(74.51% 0.162 112.93);
+  --color-cream-700: oklch(60.18% 0.129 112.86);
+  --color-cream-800: oklch(45.28% 0.096 112.72);
+  --color-cream-900: oklch(28.62% 0.057 112.38);
+  --color-cream-950: oklch(23.42% 0.046 113.21);
+
+  --color-lime-cream-50: oklch(98.6% 0.029 113.23);
+  --color-lime-cream-100: oklch(97.45% 0.059 114.68);
+  --color-lime-cream-200: oklch(95.16% 0.114 115.82);
+  --color-lime-cream-300: oklch(93.2% 0.161 116.65);
+  --color-lime-cream-400: oklch(91.43% 0.194 118.02);
+  --color-lime-cream-500: oklch(89.88% 0.211 119.6);
+  --color-lime-cream-600: oklch(76.06% 0.177 119.43);
+  --color-lime-cream-700: oklch(61.58% 0.143 119.15);
+  --color-lime-cream-800: oklch(46.1% 0.106 119.25);
+  --color-lime-cream-900: oklch(29.25% 0.065 118.38);
+  --color-lime-cream-950: oklch(23.88% 0.052 117.81);
+
+  --color-soft-fawn-50: oklch(97.1% 0.015 86.42);
+  --color-soft-fawn-100: oklch(94.29% 0.031 84.59);
+  --color-soft-fawn-200: oklch(88.78% 0.062 86.41);
+  --color-soft-fawn-300: oklch(83.21% 0.091 85.35);
+  --color-soft-fawn-400: oklch(77.87% 0.116 85.02);
+  --color-soft-fawn-500: oklch(72.59% 0.134 82.1);
+  --color-soft-fawn-600: oklch(61.67% 0.113 82.85);
+  --color-soft-fawn-700: oklch(50.15% 0.09 82.32);
+  --color-soft-fawn-800: oklch(38.02% 0.066 83.72);
+  --color-soft-fawn-900: oklch(24.7% 0.039 82.52);
+  --color-soft-fawn-950: oklch(20.45% 0.029 85.21);
+
+  --color-wine-plum-50: oklch(95.31% 0.013 5.81);
+  --color-wine-plum-100: oklch(90.77% 0.026 11.62);
+  --color-wine-plum-200: oklch(81.52% 0.054 12.46);
+  --color-wine-plum-300: oklch(72.3% 0.087 12.99);
+  --color-wine-plum-400: oklch(63.46% 0.119 15.01);
+  --color-wine-plum-500: oklch(55.34% 0.151 17.49);
+  --color-wine-plum-600: oklch(47.18% 0.126 17.71);
+  --color-wine-plum-700: oklch(38.67% 0.101 17.24);
+  --color-wine-plum-800: oklch(29.67% 0.07 17.09);
+  --color-wine-plum-900: oklch(20.01% 0.039 15.76);
+  --color-wine-plum-950: oklch(16.99% 0.028 16.52);
+
+  --color-coffee-bean-50: oklch(94.64% 0.032 348.09);
+  --color-coffee-bean-100: oklch(89.64% 0.065 348.56);
+  --color-coffee-bean-200: oklch(80.18% 0.134 350.88);
+  --color-coffee-bean-300: oklch(72.24% 0.198 354.35);
+  --color-coffee-bean-400: oklch(66.79% 0.244 358.71);
+  --color-coffee-bean-500: oklch(64.29% 0.258 5.28);
+  --color-coffee-bean-600: oklch(54.37% 0.219 4.81);
+  --color-coffee-bean-700: oklch(43.98% 0.177 4.06);
+  --color-coffee-bean-800: oklch(32.96% 0.133 1.91);
+  --color-coffee-bean-900: oklch(20.87% 0.085 357.72);
+  --color-coffee-bean-950: oklch(17.01% 0.07 354.8);
+}
