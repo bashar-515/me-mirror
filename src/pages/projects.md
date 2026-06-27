@@ -1,5 +1,5 @@
 ---
-layout: ../layouts/Layout.astro
+layout: ../layouts/pages/ProjectsLayout.astro
 ---
 
 ## _notch_

@@ -1,5 +1,5 @@
 ---
-layout: ../layouts/Layout.astro
+layout: ../layouts/pages/IndexLayout.astro
 ---
 
 # _hi!_

@@ -1,0 +1,16 @@
+---
+import Layout from "./Layout.astro";
+import Spotify from "../components/Spotify.astro";
+---
+
+<Layout>
+  <div class="grid grow grid-cols-[1fr_auto_1fr]">
+    <aside>
+      <Spotify server:defer />
+    </aside>
+
+    <main class="prose prose-stone dark:prose-invert mx-auto">
+      <slot />
+    </main>
+  </div>
+</Layout>
