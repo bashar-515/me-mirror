@@ -8,7 +8,7 @@ layout: ../layouts/Layout.astro
 currently migrating their website off of [readymag](https://readymag.com/) in
 favor of an [astro](https://astro.build/) build hosted on
 [netlify](https://www.netlify.com/). Check out my progress
-[here](https://notch-3hek.onrender.com/)
+[here](https://notch-3hek.netlify.app/)
 
 ## _beesho.net_
 
