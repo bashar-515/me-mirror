@@ -6,16 +6,15 @@ const clientSecret = env.SPOTIFY_CLIENT_SECRET;
 
 const lastfmApiKey = env.LASTFM_API_KEY;
 
-const params = new URLSearchParams({
-  method: "user.getrecenttracks",
-  user: "basharr",
-  api_key: lastfmApiKey,
-  format: "json",
-  limit: "5",
-});
-
-const res = await fetch(`https://ws.audioscrobbler.com/2.0/?${params}`);
-const recentTracks = await res.json();
+const recentTracks = await fetch(
+  `https://ws.audioscrobbler.com/2.0/?${new URLSearchParams({
+    method: "user.getrecenttracks",
+    user: "basharr",
+    api_key: lastfmApiKey,
+    format: "json",
+    limit: "5",
+  })}`,
+).then((r) => r.json());
 ---
 
 <div></div>
