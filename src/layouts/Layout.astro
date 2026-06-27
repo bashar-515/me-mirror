@@ -2,7 +2,7 @@
 import "../styles/global.css";
 
 const navLinks = [
-  { href: "/", label: "index" },
+  { href: "/", label: "index", hideOnMobile: true },
   { href: "/projects", label: "projects" },
   { href: "/gallery", label: "gallery" },
 ];
@@ -34,9 +34,9 @@ const { pathname } = Astro.url;
       >
 
       {
-        navLinks.map(({ href, label }) => {
+        navLinks.map(({ href, label, hideOnMobile }) => {
           return (
-            <div class="flex">
+            <div class={`flex ${hideOnMobile ? "max-sm:hidden" : ""}`}>
               <a
                 href={href}
                 data-active={
