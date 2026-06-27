@@ -1,5 +1,4 @@
 ---
-import Spotify from "../components/Spotify.astro";
 import "../styles/global.css";
 
 const navLinks = [
@@ -86,7 +85,9 @@ const { pathname } = Astro.url;
       </a>
     </nav>
 
-    <slot />
+    <div class="grow">
+      <slot />
+    </div>
 
     <footer
       class="border-t-on-bg-alt/50 mx-3 mb-5 flex flex-col-reverse justify-end border-t border-b border-b-transparent py-1 sm:flex-row sm:px-3"
