@@ -27,10 +27,13 @@ const { pathname } = Astro.url;
 
   <body class="flex min-h-dvh flex-col">
     <nav
-      class="border-b-on-bg-alt/25 flex items-center gap-6 border-t border-b border-t-transparent px-6 py-4 font-serif"
+      class="border-b-on-bg-alt/25 flex items-center gap-6 border-t border-b border-t-transparent px-6 py-4 font-serif max-sm:gap-3 max-sm:px-3"
     >
-      <a href="/" class="mr-auto font-mono text-2xl hover:italic" title="home"
-        >bashar</a
+      <a
+        href="/"
+        data-active={pathname === "/" || undefined}
+        class="mr-auto font-mono text-2xl hover:italic max-sm:data-[active]:italic"
+        title="home">bashar</a
       >
 
       {
@@ -42,19 +45,19 @@ const { pathname } = Astro.url;
                 data-active={
                   pathname === href || pathname === `${href}/` || undefined
                 }
-                class="peer text-on-bg-alt hover:text-on-bg data-[active]:text-on-bg order-2"
+                class="peer text-on-bg-alt hover:text-on-bg data-[active]:text-on-bg order-2 max-sm:data-[active]:underline"
               >
                 {label}
               </a>
               <span
                 aria-hidden="true"
-                class="text-on-bg-alt peer-data-[active]:text-on-bg pointer-events-none invisible order-1 select-none peer-hover:visible peer-data-[active]:visible"
+                class="text-on-bg-alt peer-data-[active]:text-on-bg pointer-events-none invisible order-1 select-none peer-hover:visible peer-data-[active]:visible max-sm:hidden"
               >
                 [&nbsp
               </span>
               <span
                 aria-hidden="true"
-                class="text-on-bg-alt peer-data-[active]:text-on-bg pointer-events-none invisible order-3 select-none peer-hover:visible peer-data-[active]:visible"
+                class="text-on-bg-alt peer-data-[active]:text-on-bg pointer-events-none invisible order-3 select-none peer-hover:visible peer-data-[active]:visible max-sm:hidden"
               >
                 &nbsp]
               </span>
@@ -79,7 +82,7 @@ const { pathname } = Astro.url;
         rel="noopener"
         title="source code"
         aria-label="source code"
-        class="group text-on-bg-alt hover:text-on-bg text-sm whitespace-nowrap"
+        class="group text-on-bg-alt hover:text-on-bg text-sm whitespace-nowrap max-sm:hidden"
       >
         &lt;/&gt;
       </a>
