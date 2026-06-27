@@ -1,6 +1,12 @@
 ---
 import "../styles/global.css";
 
+interface Props {
+  title?: string;
+}
+
+const { title } = Astro.props;
+
 const navLinks = [
   { href: "/", label: "index", hideOnMobile: true },
   { href: "/projects", label: "projects" },
@@ -15,7 +21,8 @@ const { pathname } = Astro.url;
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="icon" href="data:," />
-    <title>beesho</title>
+
+    {title && <title>{title}</title>}
 
     <script is:inline>
       document.documentElement.classList.toggle(

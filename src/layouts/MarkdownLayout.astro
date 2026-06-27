@@ -1,9 +1,15 @@
 ---
 import Layout from "./Layout.astro";
 import Spotify from "../components/Spotify.astro";
+
+interface Props {
+  title?: string;
+}
+
+const { title } = Astro.props;
 ---
 
-<Layout>
+<Layout title={title}>
   <div class="grid grid-cols-[1fr_auto_1fr]">
     <aside>
       <Spotify server:defer />
