@@ -1,6 +1,6 @@
 ---
 import Layout from "./Layout.astro";
-import Spotify from "../components/Spotify.astro";
+import Music from "../components/Music.astro";
 
 interface Props {
   frontmatter: {
@@ -15,7 +15,7 @@ const { title, description } = Astro.props.frontmatter;
 <Layout title={title} description={description}>
   <div class="grid grid-cols-[1fr_auto_1fr]">
     <aside>
-      <Spotify server:defer />
+      <Music server:defer />
     </aside>
 
     <main class="prose prose-stone dark:prose-invert">
