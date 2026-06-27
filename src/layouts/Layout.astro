@@ -28,7 +28,7 @@ const { pathname } = Astro.url;
 
   <body class="flex min-h-dvh flex-col">
     <nav
-      class="border-b-on-bg-alt/25 mb-6 flex items-center gap-6 border-t border-b border-t-transparent px-6 py-4"
+      class="border-b-on-bg-alt/25 mb-6 flex items-center gap-6 border-t border-b border-t-transparent px-6 py-4 font-serif"
     >
       <a href="/" class="mr-auto font-mono text-2xl hover:italic" title="home"
         >bashar</a
@@ -36,26 +36,30 @@ const { pathname } = Astro.url;
 
       {
         navLinks.map(({ href, label }) => {
-          const spanClass =
-            "group-hover:text-on-bg-alt group-data-[active]:text-on-bg text-transparent";
-
           return (
-            <a
-              href={href}
-              data-active={
-                pathname === href || pathname === `${href}/` || undefined
-              }
-              class="group text-on-bg-alt hover:text-on-bg data-[active]:text-on-bg"
-            >
-              <span class={spanClass} aria-hidden="true">
-                [{" "}
+            <div class="flex">
+              <a
+                href={href}
+                data-active={
+                  pathname === href || pathname === `${href}/` || undefined
+                }
+                class="peer text-on-bg-alt hover:text-on-bg data-[active]:text-on-bg order-2"
+              >
+                {label}
+              </a>
+              <span
+                aria-hidden="true"
+                class="text-on-bg-alt peer-data-[active]:text-on-bg pointer-events-none invisible order-1 select-none peer-hover:visible peer-data-[active]:visible"
+              >
+                [&nbsp
               </span>
-              {label}
-              <span class={spanClass} aria-hidden="true">
-                {" "}
-                ]
+              <span
+                aria-hidden="true"
+                class="text-on-bg-alt peer-data-[active]:text-on-bg pointer-events-none invisible order-3 select-none peer-hover:visible peer-data-[active]:visible"
+              >
+                &nbsp]
               </span>
-            </a>
+            </div>
           );
         })
       }
