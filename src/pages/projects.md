@@ -12,4 +12,4 @@ of [readymag](https://readymag.com/) in favor of an
 
 ## [_beesho.net_](https://beesho.net/)
 
-Also built with astro, but hosted on [cloudflare](https://www.cloudflare.com/)
+also built with astro, but hosted on [cloudflare](https://www.cloudflare.com/)
