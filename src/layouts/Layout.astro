@@ -45,9 +45,15 @@ const { pathname } = Astro.url;
                 data-active={
                   pathname === href || pathname === `${href}/` || undefined
                 }
-                class="peer text-on-bg-alt sm:hover:text-on-bg sm:data-[active]:text-on-bg order-2 max-sm:data-[active]:italic"
+                class="peer text-on-bg-alt sm:hover:text-on-bg sm:data-[active]:text-on-bg order-2 max-sm:grid max-sm:data-[active]:italic"
               >
-                {label}
+                <span
+                  aria-hidden="true"
+                  class="invisible col-start-1 row-start-1 italic sm:hidden"
+                >
+                  {label}
+                </span>
+                <span class="col-start-1 row-start-1">{label}</span>
               </a>
               <span
                 aria-hidden="true"
