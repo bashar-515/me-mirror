@@ -1,12 +1,15 @@
 ---
 import { env } from "cloudflare:workers";
 
-const clientId = env.SPOTIFY_CLIENT_ID;
-// const clientSecret = env.SPOTIFY_CLIENT_SECRET;
-
 const lastfmApiKey = env.LASTFM_API_KEY;
 
-const recentTracks = await fetch(
+interface RecentTracks {
+  recenttracks: {
+    track: { url: string }[];
+  };
+}
+
+const { recenttracks } = await fetch(
   `https://ws.audioscrobbler.com/2.0/?${new URLSearchParams({
     method: "user.getrecenttracks",
     user: "basharr",
@@ -14,12 +17,30 @@ const recentTracks = await fetch(
     format: "json",
     limit: "5",
   })}`,
-).then((r) => r.json());
+).then((r) => r.json<RecentTracks>());
+
+const spotifyIds = await Promise.all(
+  recenttracks.track.map(async (track) => {
+    const html = await fetch(track.url).then((r) => r.text());
+
+    const spotifyId =
+      html.match(/open\.spotify\.com\/track\/([A-Za-z0-9]+)/)?.[1] ?? "";
+
+    return { spotifyId };
+  }),
+);
 ---
 
-<div></div>
+<div>
+  {
+    spotifyIds
+      .filter(({ spotifyId }) => spotifyId)
+      .map(({ spotifyId }) => (
+        <iframe src={`https://open.spotify.com/embed/track/${spotifyId}`} />
+      ))
+  }
+</div>
 
-<script is:inline define:vars={{ clientId, recentTracks }}>
-  console.log(clientId);
-  console.log(recentTracks);
+<script is:inline define:vars={{ spotifyIds }}>
+  console.log(spotifyIds);
 </script>
