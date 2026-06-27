@@ -1,5 +1,8 @@
 ---
-layout: ../layouts/pages/ProjectsLayout.astro
+layout: ../layouts/MarkdownLayout.astro
+
+title: bashar | projects
+description: bar
 ---
 
 ## [_notch_](https://notch.ink/)

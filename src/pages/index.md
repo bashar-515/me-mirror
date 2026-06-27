@@ -1,5 +1,8 @@
 ---
-layout: ../layouts/pages/IndexLayout.astro
+layout: ../layouts/MarkdownLayout.astro
+
+title: bashar
+description: foo
 ---
 
 # _hi!_

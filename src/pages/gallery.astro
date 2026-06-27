@@ -1,7 +1,12 @@
 ---
-import GalleryLayout from "../layouts/pages/GalleryLayout.astro";
+import Layout from "../layouts/Layout.astro";
+
+const { title, description } = {
+  title: "bashar | gallery",
+  description: "",
+};
 ---
 
-<GalleryLayout>
+<Layout title={title} description={description}>
   <p>workin' on it...</p>
-</GalleryLayout>
+</Layout>
