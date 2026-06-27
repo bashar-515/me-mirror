@@ -27,7 +27,7 @@ const { pathname } = Astro.url;
 
   <body class="flex min-h-dvh flex-col">
     <nav
-      class="border-b-on-bg-alt/25 mb-6 flex items-center gap-6 border-t border-b border-t-transparent px-6 py-4 font-serif"
+      class="border-b-on-bg-alt/25 flex items-center gap-6 border-t border-b border-t-transparent px-6 py-4 font-serif"
     >
       <a href="/" class="mr-auto font-mono text-2xl hover:italic" title="home"
         >bashar</a
@@ -85,7 +85,7 @@ const { pathname } = Astro.url;
       </a>
     </nav>
 
-    <div class="grow">
+    <div class="grow p-6">
       <slot />
     </div>
 
