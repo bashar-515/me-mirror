@@ -1,6 +1,9 @@
 ---
 import { env } from "cloudflare:workers";
 
+// const spotifyClientId = env.SPOTIFY_CLIENT_ID;
+// const spotifyClientSecret = env.SPOTIFY_CLIENT_SECRET;
+
 const lastfmApiKey = env.LASTFM_API_KEY;
 
 interface RecentTracks {
@@ -19,27 +22,36 @@ const { recenttracks } = await fetch(
   })}`,
 ).then((r) => r.json<RecentTracks>());
 
-const spotifyIds = await Promise.all(
-  recenttracks.track.map(async (track) => {
-    const html = await fetch(track.url).then((r) => r.text());
-
-    const spotifyId =
-      html.match(/open\.spotify\.com\/track\/([A-Za-z0-9]+)/)?.[1] ?? "";
-
-    return { spotifyId };
-  }),
-);
+const spotifyIds = (
+  await Promise.all(
+    recenttracks.track.map(async (track) => {
+      return (await fetch(track.url).then((r) => r.text())).match(
+        /open\.spotify\.com\/track\/([A-Za-z0-9]+)/,
+      )?.[1];
+    }),
+  )
+).filter((id) => id !== undefined);
 ---
 
-<div>
-  {
-    spotifyIds
-      .filter(({ spotifyId }) => spotifyId)
-      .map(({ spotifyId }) => (
-        <iframe src={`https://open.spotify.com/embed/track/${spotifyId}`} />
-      ))
-  }
-</div>
+{
+  spotifyIds.length > 0 && (
+    <section>
+      <h2 class="text-on-bg text-md mb-2 font-mono">
+        what I've been listening to-
+      </h2>
+
+      <div>
+        {spotifyIds.map((id) => (
+          <iframe
+            src={`https://open.spotify.com/embed/track/${id}`}
+            width="100%"
+            height="152"
+          />
+        ))}
+      </div>
+    </section>
+  )
+}
 
 <script is:inline define:vars={{ spotifyIds }}>
   console.log(spotifyIds);
