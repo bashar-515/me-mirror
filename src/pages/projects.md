@@ -5,7 +5,7 @@ title: bashar | projects
 description: bar
 ---
 
-## [_notch_](https://notch.ink/)
+## [_notch.ink_](https://notch.ink/)
 
 a global literary and arts magazine. I'm migrating their website off of
 [readymag](https://readymag.com/) in favor of an [astro](https://astro.build/)
