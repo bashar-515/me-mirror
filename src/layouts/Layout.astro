@@ -1,4 +1,5 @@
 ---
+import { ClientRouter } from "astro:transitions";
 import "../styles/global.css";
 
 interface Props {
@@ -17,8 +18,9 @@ const navLinks = [
 const { pathname } = Astro.url;
 ---
 
-<html lang="en">
+<html lang="en" transition:animate="none">
   <head>
+    <ClientRouter />
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="icon" href="data:," />
@@ -27,10 +29,14 @@ const { pathname } = Astro.url;
     {description && <meta name="description" content={description} />}
 
     <script is:inline>
-      document.documentElement.classList.toggle(
-        "dark",
-        localStorage.getItem("theme") === "dark",
-      );
+      const applyTheme = () =>
+        document.documentElement.classList.toggle(
+          "dark",
+          localStorage.getItem("theme") === "dark",
+        );
+
+      applyTheme();
+      document.addEventListener("astro:after-swap", applyTheme);
     </script>
   </head>
 
@@ -152,11 +158,17 @@ const { pathname } = Astro.url;
     </footer>
 
     <script>
-      document.getElementById("theme-toggle")?.addEventListener("click", () => {
-        localStorage.setItem(
-          "theme",
-          document.documentElement.classList.toggle("dark") ? "dark" : "light",
-        );
+      document.addEventListener("astro:page-load", () => {
+        document
+          .getElementById("theme-toggle")
+          ?.addEventListener("click", () => {
+            localStorage.setItem(
+              "theme",
+              document.documentElement.classList.toggle("dark")
+                ? "dark"
+                : "light",
+            );
+          });
       });
     </script>
   </body>
