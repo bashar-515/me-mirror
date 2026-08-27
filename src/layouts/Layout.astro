@@ -119,7 +119,7 @@ const { pathname } = Astro.url;
       aria-hidden="true"
       class="dark:text-on-bg-alt p-8 text-center text-4xl sm:text-5xl"
     >
-      🃚
+      🃚&#xfe0e;
     </div>
 
     <footer class="bg-bg sticky bottom-0 px-3 pb-5 max-sm:px-4">
@@ -191,7 +191,8 @@ const { pathname } = Astro.url;
         const rank = RANKS[Math.floor(Math.random() * RANKS.length)];
 
         const card = document.getElementById("card");
-        if (card) card.textContent = String.fromCodePoint(suit + rank);
+        if (card)
+          card.textContent = String.fromCodePoint(suit + rank, 0xfe0e);
       });
     </script>
   </body>
