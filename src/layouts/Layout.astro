@@ -114,7 +114,13 @@ const { pathname } = Astro.url;
       </div>
     </div>
 
-    <div aria-hidden="true" class="p-6 text-center text-3xl sm:text-4xl">🃚</div>
+    <div
+      id="card"
+      aria-hidden="true"
+      class="p-6 text-center text-3xl sm:text-4xl"
+    >
+      🃚
+    </div>
 
     <footer class="bg-bg sticky bottom-0 px-3 pb-5 max-sm:px-4">
       <div
@@ -166,6 +172,9 @@ const { pathname } = Astro.url;
     </footer>
 
     <script>
+      const SUIT_ACES = [0x1f0a1, 0x1f0b1, 0x1f0c1, 0x1f0d1];
+      const RANKS = [...Array(14).keys()].filter((r) => r !== 11);
+
       document.addEventListener("astro:page-load", () => {
         document
           .getElementById("theme-toggle")
@@ -177,6 +186,12 @@ const { pathname } = Astro.url;
                 : "light",
             );
           });
+
+        const suit = SUIT_ACES[Math.floor(Math.random() * SUIT_ACES.length)];
+        const rank = RANKS[Math.floor(Math.random() * RANKS.length)];
+
+        const card = document.getElementById("card");
+        if (card) card.textContent = String.fromCodePoint(suit + rank);
       });
     </script>
   </body>
