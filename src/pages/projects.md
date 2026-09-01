@@ -16,7 +16,7 @@ build hosted on [netlify](https://www.netlify.com/). Check out my progress
 
 also built with astro, but hosted on [cloudflare](https://www.cloudflare.com/)
 
-## [_roomer.nyc_](https://roomer.nyc)
+## [_sinkle.io_](https://sinkle.io)
 
 in simple terms, this project is a zoom dupe (i.e., a browser-based video
 conferencing app)! I'm building it with
@@ -28,3 +28,7 @@ way of cloudflare
 persistent, secure peer-to-peer connections
 
 note that this is still a work in progress!
+
+## [_lanchess.gg_](https://lanchess.gg)
+
+...
