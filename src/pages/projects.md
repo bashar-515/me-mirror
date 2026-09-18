@@ -7,10 +7,12 @@ description: bar
 
 ## [_notch.ink_](https://notch.ink/)
 
-a global literary and arts magazine. I'm migrating their website off of
-[readymag](https://readymag.com/) in favor of an [astro](https://astro.build/)
-build hosted on [netlify](https://www.netlify.com/). Check out my progress
-[here](https://notch-3hek.netlify.app/)
+a global literary and arts magazine. I built their entire site in
+[astro](https://astro.build/) and am hosting it on
+[netlify](https://www.netlify.com/) with some [zapier](https://zapier.com/) neat
+integrations
+
+I did _not_ design the site..
 
 ## [_beesho.net_](https://beesho.net/)
 
