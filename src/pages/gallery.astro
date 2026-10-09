@@ -17,20 +17,126 @@ const photos = Object.values(
 
 <Layout title={title} description={description}>
   <div
-    class="columns-1 gap-0 sm:columns-2 md:columns-3 lg:columns-4 xl:columns-5 2xl:columns-6"
+    id="gallery"
+    class="grid grid-cols-1 items-start sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 2xl:grid-cols-6"
   >
     {
       photos.map((photo) => (
-        <a
-          href={photo.src}
-          target="_blank"
-          rel="noopener"
-          class="group grid break-inside-avoid"
-        >
-          <Image src={photo} alt="" class="col-start-1 row-start-1" />
+        <a href={photo.src} target="_blank" rel="noopener" class="group grid">
+          <Image src={photo} alt="" class="col-start-1 row-start-1 w-full" />
           <div class="col-start-1 row-start-1 group-hover:bg-black/50 group-active:bg-black/50 dark:group-hover:bg-white/50 dark:group-active:bg-white/50" />
         </a>
       ))
     }
   </div>
 </Layout>
+
+<style is:global>
+  #gallery > div {
+    margin-top: calc(var(--progress, 0) * var(--settle, 0px));
+  }
+</style>
+
+<script>
+  document.addEventListener("astro:page-load", () => {
+    const gallery = document.getElementById("gallery");
+
+    if (!gallery) return;
+
+    const nav = document.querySelector("nav");
+    const footer = document.querySelector("footer");
+    const items = [...gallery.querySelectorAll("a")];
+
+    let columns: HTMLDivElement[] = [];
+
+    let tallest = 0;
+    let shortest = 0;
+
+    const clamp = (value: number) => Math.min(Math.max(value, 0), 1);
+    const viewTop = () => nav?.getBoundingClientRect().bottom ?? 0;
+    const viewBottom = () => footer?.getBoundingClientRect().top ?? innerHeight;
+    const galleryTop = () => gallery.getBoundingClientRect().top + scrollY;
+
+    const distribute = (count: number) => {
+      columns = Array.from({ length: count }, () =>
+        Object.assign(document.createElement("div"), {
+          className: "flex flex-col",
+        }),
+      );
+
+      const ratios = new Array<number>(count).fill(0);
+
+      for (const item of items) {
+        const img = item.querySelector("img")!;
+        const next = ratios.indexOf(Math.min(...ratios));
+
+        columns[next]!.appendChild(item);
+
+        ratios[next]! +=
+          Number(img.getAttribute("height")) /
+          Number(img.getAttribute("width"));
+      }
+
+      gallery.replaceChildren(...columns);
+    };
+
+    const measure = () => {
+      const heights = columns.map((column) => column.offsetHeight);
+
+      tallest = Math.max(...heights);
+      shortest = Math.min(...heights);
+
+      columns.forEach((column, i) =>
+        column.style.setProperty("--settle", `${tallest - heights[i]!}px`),
+      );
+    };
+
+    const update = () => {
+      let start = galleryTop() - viewTop();
+      let end = galleryTop() + tallest - viewBottom();
+
+      if (end <= start)
+        [start, end] = [0, document.documentElement.scrollHeight - innerHeight];
+
+      const progress =
+        end > start ? clamp((scrollY - start) / (end - start)) : 0;
+
+      gallery.style.setProperty("--progress", String(progress));
+    };
+
+    const layout = () => {
+      gallery.style.gridTemplateColumns = "";
+
+      let count =
+        getComputedStyle(gallery).gridTemplateColumns.split(" ").length;
+
+      for (;;) {
+        if (count !== columns.length) distribute(count);
+
+        gallery.style.gridTemplateColumns = `repeat(${count}, minmax(0, 1fr))`;
+
+        measure();
+
+        const fills = galleryTop() + shortest >= viewBottom();
+
+        if (fills || count === 1) break;
+
+        count--;
+      }
+      update();
+    };
+
+    layout();
+    addEventListener("resize", layout);
+    addEventListener("scroll", update, { passive: true });
+
+    document.addEventListener(
+      "astro:before-swap",
+      () => {
+        removeEventListener("resize", layout);
+        removeEventListener("scroll", update);
+      },
+      { once: true },
+    );
+  });
+</script>
