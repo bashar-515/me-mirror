@@ -16,5 +16,11 @@ const photos = Object.values(
 ---
 
 <Layout title={title} description={description}>
-  {photos.map((photo) => <Image src={photo} width={400} alt="" />)}
+  {
+    photos.map((photo) => (
+      <a href={photo.src} target="_blank" rel="noopener">
+        <Image src={photo} alt="" />
+      </a>
+    ))
+  }
 </Layout>
