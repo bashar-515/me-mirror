@@ -1,12 +1,20 @@
 ---
+import { Image } from "astro:assets";
 import Layout from "../layouts/Layout.astro";
 
 const { title, description } = {
   title: "bashar | gallery",
   description: "",
 };
+
+const photos = Object.values(
+  import.meta.glob<ImageMetadata>("/src/assets/photos/jpg/*.jpg", {
+    eager: true,
+    import: "default",
+  }),
+).toSorted(() => Math.random() - 0.5);
 ---
 
 <Layout title={title} description={description}>
-  <p>workin' on it...</p>
+  {photos.map((photo) => <Image src={photo} width={400} alt="" />)}
 </Layout>
