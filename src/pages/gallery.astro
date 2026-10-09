@@ -1,5 +1,5 @@
 ---
-import { Image } from "astro:assets";
+import { Image, getImage } from "astro:assets";
 import Layout from "../layouts/Layout.astro";
 
 const { title, description } = {
@@ -7,12 +7,30 @@ const { title, description } = {
   description: "",
 };
 
-const photos = Object.values(
-  import.meta.glob<ImageMetadata>("/src/assets/photos/jpg/*.jpg", {
-    eager: true,
-    import: "default",
-  }),
-).toSorted(() => Math.random() - 0.5);
+const LONG_EDGE = 3000;
+const QUALITY = 85;
+
+const photos = await Promise.all(
+  Object.values(
+    import.meta.glob<ImageMetadata>("/src/assets/photos/jpg/*.jpg", {
+      eager: true,
+      import: "default",
+    }),
+  )
+    .toSorted(() => Math.random() - 0.5)
+    .map(async (src) => {
+      const large = await getImage({
+        src,
+        ...(src.width >= src.height
+          ? { width: LONG_EDGE }
+          : { height: LONG_EDGE }),
+        format: "jpeg",
+        quality: QUALITY,
+      });
+
+      return { src, large };
+    }),
+);
 ---
 
 <Layout title={title} description={description}>
@@ -21,9 +39,14 @@ const photos = Object.values(
     class="grid grid-cols-1 items-start sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 2xl:grid-cols-6"
   >
     {
-      photos.map((photo) => (
-        <a href={photo.src} target="_blank" rel="noopener" class="group grid">
-          <Image src={photo} alt="" class="col-start-1 row-start-1 w-full" />
+      photos.map(({ src, large }) => (
+        <a href={large.src} target="_blank" rel="noopener" class="group grid">
+          <Image
+            src={src}
+            alt=""
+            layout="full-width"
+            class="col-start-1 row-start-1 w-full"
+          />
           <div class="col-start-1 row-start-1 group-hover:bg-black/50 group-active:bg-black/50 dark:group-hover:bg-white/50 dark:group-active:bg-white/50" />
         </a>
       ))
@@ -123,6 +146,10 @@ const photos = Object.values(
 
         count--;
       }
+
+      for (const item of items)
+        item.querySelector("img")!.sizes = `${100 / count}vw`;
+
       update();
     };
 
