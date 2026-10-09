@@ -16,17 +16,21 @@ const photos = Object.values(
 ---
 
 <Layout title={title} description={description}>
-  {
-    photos.map((photo) => (
-      <a
-        href={photo.src}
-        target="_blank"
-        rel="noopener"
-        class="group grid w-fit"
-      >
-        <Image src={photo} alt="" class="col-start-1 row-start-1" />
-        <div class="col-start-1 row-start-1 group-hover:bg-black/50 dark:group-hover:bg-white/50" />
-      </a>
-    ))
-  }
+  <div
+    class="columns-1 gap-0 sm:columns-2 md:columns-3 lg:columns-4 xl:columns-5 2xl:columns-6"
+  >
+    {
+      photos.map((photo) => (
+        <a
+          href={photo.src}
+          target="_blank"
+          rel="noopener"
+          class="group grid break-inside-avoid"
+        >
+          <Image src={photo} alt="" class="col-start-1 row-start-1" />
+          <div class="col-start-1 row-start-1 group-hover:bg-black/50 dark:group-hover:bg-white/50" />
+        </a>
+      ))
+    }
+  </div>
 </Layout>
