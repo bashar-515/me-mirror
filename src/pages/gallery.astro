@@ -18,8 +18,14 @@ const photos = Object.values(
 <Layout title={title} description={description}>
   {
     photos.map((photo) => (
-      <a href={photo.src} target="_blank" rel="noopener">
-        <Image src={photo} alt="" />
+      <a
+        href={photo.src}
+        target="_blank"
+        rel="noopener"
+        class="group grid w-fit"
+      >
+        <Image src={photo} alt="" class="col-start-1 row-start-1" />
+        <div class="col-start-1 row-start-1 group-hover:bg-black/50 dark:group-hover:bg-white/50" />
       </a>
     ))
   }
