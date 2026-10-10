@@ -14,7 +14,7 @@
     "generate-types": "wrangler types",
     "format:write": "prettier --write .",
     "format:check": "prettier --check .",
-    "sharp": "sharp -i src/assets/photos/tif/*.tif -o src/assets/photos/jpg -f jpeg -q 100 --mozjpeg --chromaSubsampling 4:4:4 resize 4000 4000 --fit inside --withoutEnlargement"
+    "sharp": "sharp -i src/assets/photos/tif/*.tif -o src/assets/photos/jpg -f jpeg -q 90 --mozjpeg --chromaSubsampling 4:4:4 resize 4000 4000 --fit inside --withoutEnlargement"
   },
   "dependencies": {
     "@lucide/astro": "^1.18.0",
