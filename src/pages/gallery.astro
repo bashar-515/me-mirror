@@ -1,5 +1,6 @@
 ---
 import { Image, getImage } from "astro:assets";
+import type { GetImageResult } from "astro";
 import Layout from "../layouts/Layout.astro";
 
 const { title, description } = {
@@ -10,27 +11,42 @@ const { title, description } = {
 const LONG_EDGE = 3000;
 const QUALITY = 85;
 
+const VIDEO_WIDTH = 1280;
+const VIDEO_HEIGHT = 720;
+
+type Media =
+  | { type: "photo"; src: ImageMetadata; large: GetImageResult }
+  | { type: "video"; src: string };
+
 const photos = await Promise.all(
   Object.values(
     import.meta.glob<ImageMetadata>("/src/assets/photos/jpg/*.jpg", {
       eager: true,
       import: "default",
     }),
-  )
-    .toSorted(() => Math.random() - 0.5)
-    .map(async (src) => {
-      const large = await getImage({
-        src,
-        ...(src.width >= src.height
-          ? { width: LONG_EDGE }
-          : { height: LONG_EDGE }),
-        format: "jpeg",
-        quality: QUALITY,
-      });
+  ).map(async (src): Promise<Media> => {
+    const large = await getImage({
+      src,
+      ...(src.width >= src.height
+        ? { width: LONG_EDGE }
+        : { height: LONG_EDGE }),
+      format: "jpeg",
+      quality: QUALITY,
+    });
 
-      return { src, large };
-    }),
+    return { type: "photo", src, large };
+  }),
 );
+
+const videos = Object.values(
+  import.meta.glob<string>("/src/assets/videos/mp4/*.mp4", {
+    eager: true,
+    query: "?url",
+    import: "default",
+  }),
+).map((src): Media => ({ type: "video", src }));
+
+const media = [...photos, ...videos].toSorted(() => Math.random() - 0.5);
 ---
 
 <Layout title={title} description={description}>
@@ -39,131 +55,154 @@ const photos = await Promise.all(
     class="grid grid-cols-1 items-start sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 2xl:grid-cols-6"
   >
     {
-      photos.map(({ src, large }) => (
-        <a href={large.src} target="_blank" rel="noopener" class="group grid">
-          <Image
-            src={src}
-            alt=""
-            layout="full-width"
-            class="col-start-1 row-start-1 w-full"
-          />
+      media.map((item) => (
+        <a
+          href={item.type === "photo" ? item.large.src : item.src}
+          target="_blank"
+          rel="noopener"
+          class="group grid"
+        >
+          {item.type === "photo" ? (
+            <Image
+              src={item.src}
+              alt=""
+              layout="full-width"
+              class="col-start-1 row-start-1 w-full"
+            />
+          ) : (
+            <video
+              src={item.src}
+              width={VIDEO_WIDTH}
+              height={VIDEO_HEIGHT}
+              autoplay
+              muted
+              loop
+              playsinline
+              class="col-start-1 row-start-1 w-full"
+            />
+          )}
+
           <div class="col-start-1 row-start-1 group-hover:bg-black/50 group-active:bg-black/50 dark:group-hover:bg-white/50 dark:group-active:bg-white/50" />
         </a>
       ))
     }
   </div>
+
+  <style is:global>
+    #gallery > div {
+      margin-top: calc(var(--progress, 0) * var(--settle, 0px));
+    }
+  </style>
+
+  <script>
+    document.addEventListener("astro:page-load", () => {
+      const gallery = document.getElementById("gallery");
+
+      if (!gallery) return;
+
+      const nav = document.querySelector("nav");
+      const footer = document.querySelector("footer");
+      const items = [...gallery.querySelectorAll("a")];
+
+      let columns: HTMLDivElement[] = [];
+
+      let tallest = 0;
+      let shortest = 0;
+
+      const clamp = (value: number) => Math.min(Math.max(value, 0), 1);
+      const viewTop = () => nav?.getBoundingClientRect().bottom ?? 0;
+      const viewBottom = () =>
+        footer?.getBoundingClientRect().top ?? innerHeight;
+      const galleryTop = () => gallery.getBoundingClientRect().top + scrollY;
+
+      const distribute = (count: number) => {
+        columns = Array.from({ length: count }, () =>
+          Object.assign(document.createElement("div"), {
+            className: "flex flex-col",
+          }),
+        );
+
+        const ratios = new Array<number>(count).fill(0);
+
+        for (const item of items) {
+          const media = item.querySelector("img, video")!;
+          const next = ratios.indexOf(Math.min(...ratios));
+
+          columns[next]!.appendChild(item);
+
+          ratios[next]! +=
+            Number(media.getAttribute("height")) /
+            Number(media.getAttribute("width"));
+        }
+
+        gallery.replaceChildren(...columns);
+      };
+
+      const measure = () => {
+        const heights = columns.map((column) => column.offsetHeight);
+
+        tallest = Math.max(...heights);
+        shortest = Math.min(...heights);
+
+        columns.forEach((column, i) =>
+          column.style.setProperty("--settle", `${tallest - heights[i]!}px`),
+        );
+      };
+
+      const update = () => {
+        let start = galleryTop() - viewTop();
+        let end = galleryTop() + tallest - viewBottom();
+
+        if (end <= start)
+          [start, end] = [
+            0,
+            document.documentElement.scrollHeight - innerHeight,
+          ];
+
+        const progress =
+          end > start ? clamp((scrollY - start) / (end - start)) : 0;
+
+        gallery.style.setProperty("--progress", String(progress));
+      };
+
+      const layout = () => {
+        gallery.style.gridTemplateColumns = "";
+
+        let count =
+          getComputedStyle(gallery).gridTemplateColumns.split(" ").length;
+
+        for (;;) {
+          if (count !== columns.length) distribute(count);
+
+          gallery.style.gridTemplateColumns = `repeat(${count}, minmax(0, 1fr))`;
+
+          measure();
+
+          const fills = galleryTop() + shortest >= viewBottom();
+
+          if (fills || count === 1) break;
+
+          count--;
+        }
+
+        for (const img of gallery.querySelectorAll("img"))
+          img.sizes = `${100 / count}vw`;
+
+        update();
+      };
+
+      layout();
+      addEventListener("resize", layout);
+      addEventListener("scroll", update, { passive: true });
+
+      document.addEventListener(
+        "astro:before-swap",
+        () => {
+          removeEventListener("resize", layout);
+          removeEventListener("scroll", update);
+        },
+        { once: true },
+      );
+    });
+  </script>
 </Layout>
-
-<style is:global>
-  #gallery > div {
-    margin-top: calc(var(--progress, 0) * var(--settle, 0px));
-  }
-</style>
-
-<script>
-  document.addEventListener("astro:page-load", () => {
-    const gallery = document.getElementById("gallery");
-
-    if (!gallery) return;
-
-    const nav = document.querySelector("nav");
-    const footer = document.querySelector("footer");
-    const items = [...gallery.querySelectorAll("a")];
-
-    let columns: HTMLDivElement[] = [];
-
-    let tallest = 0;
-    let shortest = 0;
-
-    const clamp = (value: number) => Math.min(Math.max(value, 0), 1);
-    const viewTop = () => nav?.getBoundingClientRect().bottom ?? 0;
-    const viewBottom = () => footer?.getBoundingClientRect().top ?? innerHeight;
-    const galleryTop = () => gallery.getBoundingClientRect().top + scrollY;
-
-    const distribute = (count: number) => {
-      columns = Array.from({ length: count }, () =>
-        Object.assign(document.createElement("div"), {
-          className: "flex flex-col",
-        }),
-      );
-
-      const ratios = new Array<number>(count).fill(0);
-
-      for (const item of items) {
-        const img = item.querySelector("img")!;
-        const next = ratios.indexOf(Math.min(...ratios));
-
-        columns[next]!.appendChild(item);
-
-        ratios[next]! +=
-          Number(img.getAttribute("height")) /
-          Number(img.getAttribute("width"));
-      }
-
-      gallery.replaceChildren(...columns);
-    };
-
-    const measure = () => {
-      const heights = columns.map((column) => column.offsetHeight);
-
-      tallest = Math.max(...heights);
-      shortest = Math.min(...heights);
-
-      columns.forEach((column, i) =>
-        column.style.setProperty("--settle", `${tallest - heights[i]!}px`),
-      );
-    };
-
-    const update = () => {
-      let start = galleryTop() - viewTop();
-      let end = galleryTop() + tallest - viewBottom();
-
-      if (end <= start)
-        [start, end] = [0, document.documentElement.scrollHeight - innerHeight];
-
-      const progress =
-        end > start ? clamp((scrollY - start) / (end - start)) : 0;
-
-      gallery.style.setProperty("--progress", String(progress));
-    };
-
-    const layout = () => {
-      gallery.style.gridTemplateColumns = "";
-
-      let count =
-        getComputedStyle(gallery).gridTemplateColumns.split(" ").length;
-
-      for (;;) {
-        if (count !== columns.length) distribute(count);
-
-        gallery.style.gridTemplateColumns = `repeat(${count}, minmax(0, 1fr))`;
-
-        measure();
-
-        const fills = galleryTop() + shortest >= viewBottom();
-
-        if (fills || count === 1) break;
-
-        count--;
-      }
-
-      for (const item of items)
-        item.querySelector("img")!.sizes = `${100 / count}vw`;
-
-      update();
-    };
-
-    layout();
-    addEventListener("resize", layout);
-    addEventListener("scroll", update, { passive: true });
-
-    document.addEventListener(
-      "astro:before-swap",
-      () => {
-        removeEventListener("resize", layout);
-        removeEventListener("scroll", update);
-      },
-      { once: true },
-    );
-  });
-</script>
