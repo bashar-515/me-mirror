@@ -35,6 +35,6 @@
     "sharp-cli": "^6.1.0",
     "tailwindcss": "^4.3.0",
     "typescript": "^6.0.3",
-    "wrangler": "^4.99.0"
+    "wrangler": "^4.151.1"
   }
 }
