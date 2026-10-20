@@ -41,9 +41,13 @@ const { pathname } = Astro.url;
   </head>
 
   <body class="flex flex-col">
-    <div class="flex min-h-dvh flex-col">
+    <div class="grid min-h-dvh grid-cols-1 grid-rows-[auto_1fr]">
+      <div class="row-start-2 p-6 pb-0">
+        <slot />
+      </div>
+
       <nav
-        class="border-b-on-bg-alt/25 bg-bg sticky top-0 flex items-center gap-6 border-t border-b border-t-transparent px-6 py-4 font-serif max-sm:gap-4 max-sm:px-4"
+        class="border-b-on-bg-alt/25 bg-bg sticky top-0 row-start-1 flex items-center gap-6 border-t border-b border-t-transparent px-6 py-4 font-serif max-sm:gap-4 max-sm:px-4"
       >
         <a
           href="/"
@@ -108,10 +112,6 @@ const { pathname } = Astro.url;
         >
         </a>
       </nav>
-
-      <div class="grow p-6 pb-0">
-        <slot />
-      </div>
     </div>
 
     <div
